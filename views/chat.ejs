@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>Chat app</h1>
+    <div id="joined"></div>
+    <input type="text"  id="messages">
+    <button onclick="onEmit()" >send</button>
+    <br>
+    <br>
+    
+  </body>
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io("http://localhost:8000");
+    function onEmit(){
+        console.log('hit');
+        const msg=document.querySelector('#messages').value
+        console.log({msg});
+        if(msg.length >0){
+            socket.emit('message',{msg,from: '<%=  username %>'})
+
+        }
+    }
+    socket.on("joined", (username) => {
+      const elem = document.createElement("h5");
+      elem.innerText = `${username} has joined`;
+
+      document.querySelector("#joined").appendChild(elem);
+    });
+  </script>
+</html>
