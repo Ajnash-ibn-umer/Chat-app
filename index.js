@@ -20,7 +20,7 @@ app.get('/', (req, res) => {
 io.on('connection',(socket)=>{
     socket.on('message',({msg,from})=>{
         console.log(from +' : '+msg);
-x
+
     })
 })
 app.get('/chat',(req,res)=>{
