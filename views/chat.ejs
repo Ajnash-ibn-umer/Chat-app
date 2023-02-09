@@ -9,24 +9,35 @@
   <body>
     <h1>Chat app</h1>
     <div id="joined"></div>
-    <input type="text"  id="messages">
-    <button onclick="onEmit()" >send</button>
-    <br>
-    <br>
-    
+    <div id="msgDiv"></div>
+    <br />
+    <br />
+    <input type="text" id="messages" />
+
+    <button onclick="onEmit()">send</button>
+    <br />
+    <br />
   </body>
   <script src="/socket.io/socket.io.js"></script>
   <script>
     const socket = io("http://localhost:8000");
-    function onEmit(){
-        console.log('hit');
-        const msg=document.querySelector('#messages').value
-        console.log({msg});
-        if(msg.length >0){
-            socket.emit('message',{msg,from: '<%=  username %>'})
+    function onEmit() {
+      console.log("hit");
+      const msg = document.querySelector("#messages").value;
 
-        }
+      console.log({ msg });
+      if (msg.length > 0) {
+        socket.emit("message", { msg, from: "<%=  username %>" });
+      }
     }
+
+    socket.on("messageto", ({ from, msg }) => {
+      console.log("recieved msg", from + ":" + msg);
+      const msgElm = document.querySelector("#msgDiv");
+      const chatDiv = document.createElement("h5");
+      chatDiv.innerText=`${from} : ${msg}`
+      msgElm.append(chatDiv);
+    });
     socket.on("joined", (username) => {
       const elem = document.createElement("h5");
       elem.innerText = `${username} has joined`;
